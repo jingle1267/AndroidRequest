@@ -1,4 +1,4 @@
-package com.ihongqiqu.request;
+package com.ihongqiqu.request.demo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.ihongqiqu.request", appContext.getPackageName());
+        assertEquals("com.ihongqiqu.request.demo", appContext.getPackageName());
     }
 }
