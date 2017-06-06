@@ -53,3 +53,12 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+/build/
+/.idea/
+/app/app.iml
+/app/build/
+/request/request.iml
+/local.properties
+/.gradle/
+/request/build/
+/gradle/
