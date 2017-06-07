@@ -47,7 +47,7 @@
 
 ```xml
 dependencies {
-    compile 'com.ihongqiqu:android-utils:1.0.2'
+    compile 'com.ihongqiqu:android-request:1.0.0'
 }
 ```
 
