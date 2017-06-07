@@ -23,6 +23,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class RequestAgent {
 
     private static RetrofitHttpService retrofitHttpService;
+    /**
+     * 这里是application的context
+     */
+    private static Context mContext;
 
     /**
      * 初始化方法
@@ -31,11 +35,21 @@ public class RequestAgent {
      * @param baseUrl
      */
     public static void init(Context context, String baseUrl) {
-        //接口baseUrl
+        RequestAgent.mContext = context.getApplicationContext();
+        retrofitHttpService = getRetrofitService(context, baseUrl);
+    }
+
+    /**
+     * 获取retrofitService
+     *
+     * @param context
+     * @param baseUrl
+     * @return
+     */
+    public static RetrofitHttpService getRetrofitService(Context context, String baseUrl) {
         if (TextUtils.isEmpty(baseUrl)) {
             throw new NullPointerException("BASE_URL can not be null");
         }
-        //解析器
 
         OkHttpClient client = RequestAgent.getOkHttpClient(context.getApplicationContext(), baseUrl, null);
 
@@ -51,11 +65,28 @@ public class RequestAgent {
                 .baseUrl(baseUrl)
                 .client(client).build();
 
-        retrofitHttpService =
-                retrofit.create(RetrofitHttpService.class);
-
+        return retrofit.create(RetrofitHttpService.class);
     }
 
+    /**
+     * 设置显示log
+     */
+    public static void showLog() {
+        RequestConfig.showLog();
+    }
+
+    /**
+     * 设置隐藏log
+     */
+    public static void hideLog() {
+        RequestConfig.hideLog();
+    }
+
+    /**
+     * 这里获取的是默认的 retrofit service
+     *
+     * @return
+     */
     public static RetrofitHttpService getRetrofitHttpService() {
         return retrofitHttpService;
     }
@@ -63,8 +94,6 @@ public class RequestAgent {
     public static void setRetrofitHttpService(RetrofitHttpService retrofitHttpService) {
         RequestAgent.retrofitHttpService = retrofitHttpService;
     }
-
-    private static OkHttpClient okHttpClient;
 
     public static void addHeader(String key, String value) {
         GlobalParams.getCommonHeaders().put(key, value);
@@ -83,29 +112,28 @@ public class RequestAgent {
     }
 
     protected static synchronized OkHttpClient getOkHttpClient(final Context context, String baseUrl, List<String> servers) {
-        if (okHttpClient == null) {
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new DownLoadInterceptor(baseUrl))
-                    .addInterceptor(new RetryAndChangeIpInterceptor(baseUrl, servers))
-                    .addInterceptor(new ParamsInterceptorImpl(context))
-                    .addNetworkInterceptor(new CacheInterceptor())
-                    .cache(new CacheProvide(context).provideCache())
-                    .retryOnConnectionFailure(true)
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    .readTimeout(8, TimeUnit.SECONDS)
-                    .writeTimeout(8, TimeUnit.SECONDS)
-                    .build();
-            //printf logs while  debug
-            if (false) {
-                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-                client = client.newBuilder().addInterceptor(logging).build();
-            }
-            okHttpClient = client;
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new DownLoadInterceptor(baseUrl))
+                .addInterceptor(new RetryAndChangeIpInterceptor(baseUrl, servers))
+                .addInterceptor(new ParamsInterceptorImpl(context))
+                .addNetworkInterceptor(new CacheInterceptor())
+                .cache(new CacheProvide(context).provideCache())
+                .retryOnConnectionFailure(true)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(8, TimeUnit.SECONDS)
+                .writeTimeout(8, TimeUnit.SECONDS)
+                .build();
+        if (RequestConfig.isShowLog()) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            client = client.newBuilder().addInterceptor(logging).build();
         }
-        return okHttpClient;
+        return client;
 
     }
 
+    public static Context getContext() {
+        return mContext;
+    }
 }

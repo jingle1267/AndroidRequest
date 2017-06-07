@@ -5,5 +5,6 @@
     <string name="response">response</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="test_request">test request</string>
+    <string name="test_get">test get</string>
+    <string name="test_post">test post</string>
 </resources>

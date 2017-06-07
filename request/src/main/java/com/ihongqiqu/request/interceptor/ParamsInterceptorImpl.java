@@ -1,7 +1,6 @@
 package com.ihongqiqu.request.interceptor;
 
 import android.content.Context;
-import android.util.Log;
 import com.ihongqiqu.request.GlobalParams;
 import java.io.IOException;
 import java.util.Map;
@@ -13,6 +12,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * 参数拦截器，公共Header和param在这里添加
+ */
 public class ParamsInterceptorImpl implements Interceptor {
 
     private Context context;
@@ -102,7 +104,7 @@ public class ParamsInterceptorImpl implements Interceptor {
         }
 
 
-        Log.d("API_LOG", newRequest.toString());
+        // Log.d("API_LOG", newRequest.toString());
 
         return chain.proceed(newRequest);
     }

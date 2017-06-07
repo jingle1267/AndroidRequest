@@ -6,5 +6,7 @@ package com.ihongqiqu.request;
  * Created by zhenguo on 6/6/17.
  */
 public interface Success {
+
     void onSuccess(String model);
+
 }

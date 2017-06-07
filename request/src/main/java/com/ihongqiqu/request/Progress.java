@@ -6,5 +6,7 @@ package com.ihongqiqu.request;
  * Created by zhenguo on 6/6/17.
  */
 public interface Progress {
+
     void onProgress(float p);
+
 }

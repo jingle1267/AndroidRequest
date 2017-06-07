@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RequestAgent.showLog();
+        RequestAgent.init(getApplicationContext(), "https://api.github.com/");
+
         mTextMessage = (TextView) findViewById(R.id.message);
         mRequest = (TextView) findViewById(R.id.tv_request);
         mResponse = (TextView) findViewById(R.id.tv_response);
@@ -54,22 +57,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_request:
-                testRequest();
+            case R.id.btn_get:
+                mResponse.setText("");
+                testGet();
+                break;
+            case R.id.btn_post:
+                mResponse.setText("");
+                testPost();
                 break;
         }
     }
 
-    public void testRequest() {
-        RequestAgent.init(getApplicationContext(), "https://api.github.com/");
+    public void testGet() {
 
-        new RequestBuilder().url("users/jingle1267/repos")
+
+        RequestAgent.addHeader("Cookie", "123456");
+        RequestAgent.addParam("publicKey", "publicValue");
+
+        new RequestBuilder().path("users/jingle1267/repos")
                 .success(new Success() {
                     @Override
                     public void onSuccess(String model) {
 
                         Log.e("MainActivity", "111");
-                        Log.e("MainActivity", model);
                         mResponse.setText(model);
                     }
                 })
@@ -77,11 +87,36 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onError(int statusCode, String errorMessage, Throwable t) {
                         Log.e("MainActivity", "222");
-                        Log.e("MainActivity", errorMessage);
                         mResponse.setText(errorMessage);
                     }
                 })
-                .get();
+                .type("get")
+                .build();
+
+    }
+
+    public void testPost() {
+
+        RequestAgent.addHeader("Cookie", "123456");
+        RequestAgent.addParam("publicKey", "publicValue");
+
+        new RequestBuilder().path("users/jingle1267/repos")
+                .success(new Success() {
+                    @Override
+                    public void onSuccess(String model) {
+
+                        Log.e("MainActivity", "111");
+                        mResponse.setText(model);
+                    }
+                })
+                .error(new Error() {
+                    @Override
+                    public void onError(int statusCode, String errorMessage, Throwable t) {
+                        Log.e("MainActivity", "222");
+                        mResponse.setText(errorMessage);
+                    }
+                })
+                .build();
 
     }
 

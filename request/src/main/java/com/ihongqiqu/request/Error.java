@@ -6,6 +6,7 @@ package com.ihongqiqu.request;
  * Created by zhenguo on 6/6/17.
  */
 public interface Error {
+
     void onError(int statusCode, String errorMessage, Throwable t);
 
 }
