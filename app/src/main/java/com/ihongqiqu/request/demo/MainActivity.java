@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         RequestAgent.addParam("publicKey", "publicValue");
 
         new RequestBuilder().path("users/jingle1267/repos")
+                .header("head1", "head1Value")
+                .param("param1", "param1Value")
                 .success(new Success() {
                     @Override
                     public void onSuccess(String model) {
